@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: drt4f-2ncvz
+created: 2026-05-13T18:06:43+05:30

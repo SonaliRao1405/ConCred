@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "code": "as",
+    "englishName": "Assamese",
+    "nativeName": "অসমীয়া",
+    "dir": "ltr"
+  },
+  "common": {
+    "nav": {
+      "home": "হোম",
+      "field": "ক্ষেত্ৰ",
+      "wallet": "ৱালেট",
+      "learn": "শিকা",
+      "profile": "প্ৰ'ফাইল"
+    },
+    "roles": {
+      "guardian": "গাৰ্ডিয়ান",
+      "ngo_admin": "এনজিঅ' এডমিন"
+    },
+    "status": {
+      "pending": "অপেক্ষাত",
+      "approved": "অনুমোদিত",
+      "rejected": "প্ৰত্যাখ্যাত",
+      "manual_review": "হস্তচালিত পৰ্যালোচনা"
+    },
+    "actions": {
+      "login": "লগইন",
+      "createAccount": "একাউন্ট তৈয়াৰ কৰক",
+      "enterWorkspace": "ৱৰ্কস্পেচ খোলক",
+      "createWorkspace": "ৱৰ্কস্পেচ তৈয়াৰ কৰক",
+      "syncQueue": "কিউ ছিঙ্ক কৰক",
+      "lockGps": "GPS লক কৰক",
+      "saveUpload": "আপলোড সাঁচি ৰাখক",
+      "updateGoal": "লক্ষ্য আপডেট কৰক",
+      "moveToSavings": "{{amount}} সঞ্চয়লৈ দিয়ক",
+      "close": "বন্ধ কৰক",
+      "saveQuizProgress": "কুইজ অগ্ৰগতি সাঁচি ৰাখক",
+      "signOut": "চাইন আউট",
+      "approve": "অনুমোদন কৰক",
+      "manualReview": "হস্তচালিত পৰ্যালোচনা",
+      "reject": "নাকচ কৰক"
+    },
+    "fields": {
+      "phoneNumber": "ফোন নম্বৰ",
+      "passcode": "পাছকোড",
+      "fullName": "সম্পূৰ্ণ নাম",
+      "language": "ভাষা",
+      "village": "গাঁও",
+      "community": "সম্প্ৰদায়",
+      "region": "অঞ্চল",
+      "organization": "সংস্থা",
+      "adminId": "এডমিন আইডি",
+      "profileImage": "প্ৰ'ফাইল ফটো",
+      "activityType": "কাৰ্যকলাপ ধৰণ",
+      "fieldNotes": "ক্ষেত্ৰ টোকা",
+      "beforeEvidence": "আগৰ প্ৰমাণ",
+      "afterEvidence": "পিছৰ প্ৰমাণ",
+      "goalTitle": "লক্ষ্য শিৰোনাম",
+      "goalTarget": "লক্ষ্য পৰিমাণ",
+      "role": "ভূমিকা"
+    }
+  },
+  "onboarding": {
+    "heroPill": "অফলাইন-ফাৰ্ষ্ট প্ৰিমিয়াম ফিল্ড অপাৰেচন",
+    "languageTitle": "আপোনাৰ ভাষা বাছক",
+    "languageSubtitle": "তৎক্ষণাত সলনি কৰক, অফলাইনতেই কাম কৰক।"
+  },
+  "dashboard": {
+    "eyebrow": "গাৰ্ডিয়ান ৱৰ্কস্পেচ",
+    "welcomeBack": "আকৌ স্বাগতম, {{name}}",
+    "trustLabel": "ট্ৰাষ্ট",
+    "trustSubtitle": "ক্ষেত্ৰ বিশ্বাসযোগ্যতা স্ক'ৰ",
+    "metrics": {
+      "liveCredits": "লাইভ ক্ৰেডিট",
+      "pendingRewards": "অপেক্ষমাণ পুরস্কাৰ",
+      "rank": "ৰেংক",
+      "verificationRate": "যাচাই হাৰ",
+      "available": "উপলব্ধ",
+      "pending": "অপেক্ষমাণ",
+      "saved": "সঞ্চিত",
+      "goalTarget": "লক্ষ্য পৰিমাণ",
+      "trustScore": "ট্ৰাষ্ট স্ক'ৰ",
+      "completedModules": "সম্পূৰ্ণ মডিউল",
+      "queuedUploads": "কিউ আপলোড",
+      "currentRank": "বৰ্তমান ৰেংক"
+    }
+  },
+  "uploads": {
+    "title": "ক্ষেত্ৰ কাৰ্যকলাপ সৃষ্টি কৰক",
+    "gpsLocked": "GPS লক হৈছে",
+    "gpsWaiting": "GPS অপেক্ষাত",
+    "offlineQueueTitle": "অফলাইন কিউ",
+    "activities": {
+      "forest-patrol": "বন টহল",
+      "water-source-check": "পানীৰ উৎস পৰীক্ষা",
+      "wildlife-sighting": "বন্যপ্ৰাণী দেখা",
+      "habitat-restoration": "আৱাস পুনৰুদ্ধাৰ",
+      "fire-risk-report": "অগ্নি ঝুঁকি প্ৰতিবেদন"
+    }
+  },
+  "settings": {
+    "language": {
+      "title": "ভাষা",
+      "subtitle": "এপ কোন ভাষাত চলিব সেয়া বাছক।"
+    },
+    "profile": {
+      "title": "প্ৰ'ফাইল আৰু পৰিচয়",
+      "trustTitle": "ট্ৰাষ্ট আৰু ধাৰাবাহিকতা"
+    }
+  },
+  "literacy": {
+    "journeyTitle": "শিক্ষাৰ যাত্ৰা",
+    "completed": "সম্পূৰ্ণ",
+    "unlocked": "খোলা",
+    "locked": "লক",
+    "modules": {
+      "forest-income-basics": {
+        "title": "বন আয়ৰ মূলভিত্তি",
+        "category": "টকাৰ আত্মবিশ্বাস"
+      },
+      "savings-habits": {
+        "title": "কঠিন ঋতুত সঞ্চয়ৰ অভ্যাস",
+        "category": "সঞ্চয়"
+      },
+      "trust-and-credit": {
+        "title": "ট্ৰাষ্ট, প্ৰমাণ আৰু ক্ৰেডিট",
+        "category": "ক্ৰেডিট প্ৰস্তুতি"
+      },
+      "family-budget-planning": {
+        "title": "পৰিয়াল বাজেট পৰিকল্পনা",
+        "category": "বাজেট"
+      },
+      "fraud-and-safety": {
+        "title": "ক্ষেত্ৰৰ প্ৰৱঞ্চনা আৰু সুৰক্ষা",
+        "category": "সুৰক্ষা"
+      }
+    }
+  },
+  "ngo": {
+    "eyebrow": "এনজিঅ' কমাণ্ড",
+    "tabs": {
+      "queue": "যাচাই কিউ",
+      "guardians": "গাৰ্ডিয়ান বিশ্লেষণ",
+      "exports": "ৰপ্তানি"
+    },
+    "metrics": {
+      "guardians": "গাৰ্ডিয়ান",
+      "flagged": "ফ্লেগ কৰা",
+      "approved": "অনুমোদিত",
+      "liveQueue": "লাইভ কিউ"
+    },
+    "queue": {
+      "title": "যাচাই কিউ",
+      "rewardEstimate": "পুৰস্কাৰ অনুমান: {{amount}} CC",
+      "gpsAccuracy": "GPS সঠিকতা: {{accuracy}}m",
+      "sync": "ছিঙ্ক: {{state}}"
+    },
+    "guardianAnalytics": {
+      "title": "গাৰ্ডিয়ান বিশ্লেষণ",
+      "trust": "ট্ৰাষ্ট {{value}}",
+      "verify": "যাচাই {{value}}%",
+      "wallet": "ৱালেট {{value}} CC"
+    },
+    "regionalLeaderboard": {
+      "title": "আঞ্চলিক লিডাৰবোর্ড"
+    },
+    "exports": {
+      "title": "প্ৰগ্ৰাম ৰপ্তানি",
+      "guardianCsv": "গাৰ্ডিয়ান বিশ্লেষণ CSV",
+      "queueCsv": "মডাৰেচন কিউ CSV"
+    }
+  },
+  "offline": {
+    "connected": "সংযুক্ত",
+    "offlineFirst": "অফলাইন-ফাৰ্ষ্ট"
+  },
+  "errors": {
+    "generic": "আপোনাৰ অনুৰোধ প্ৰক্ৰিয়াকৰণৰ সময়ত কিবা ভুল হৈছিল।",
+    "duplicatePhone": "এই ফোন নম্বৰৰ সৈতে ইতিমধ্যে একাউন্ট আছে।",
+    "invalidLogin": "ফোন নম্বৰ বা পাছকোড ভুল।",
+    "savingsExceedsBalance": "সঞ্চয় স্থানান্তৰ উপলব্ধ ৱালেট বেলেঞ্চৰ ওপৰত।"
+  }
+}

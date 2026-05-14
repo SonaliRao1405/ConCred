@@ -1,0 +1,231 @@
+{
+  "meta": {
+    "code": "gu",
+    "englishName": "Gujarati",
+    "nativeName": "ગુજરાતી",
+    "dir": "ltr"
+  },
+  "common": {
+    "nav": {
+      "home": "હોમ",
+      "field": "ક્ષેત્ર",
+      "wallet": "વૉલેટ",
+      "learn": "શીખો",
+      "profile": "પ્રોફાઇલ"
+    },
+    "roles": {
+      "guardian": "ગાર્ડિયન",
+      "ngo_admin": "એનજીઓ એડમિન"
+    },
+    "status": {
+      "pending": "બાકી",
+      "approved": "મંજુર",
+      "rejected": "નકારેલ",
+      "manual_review": "મેન્યુઅલ સમીક્ષા"
+    },
+    "syncState": {
+      "synced": "સિંક થયું",
+      "queued": "કતારમાં"
+    },
+    "actions": {
+      "login": "લૉગિન",
+      "createAccount": "ખાતું બનાવો",
+      "enterWorkspace": "વર્કસ્પેસ ખોલો",
+      "createWorkspace": "વર્કસ્પેસ બનાવો",
+      "syncQueue": "કતાર સિંક કરો",
+      "lockGps": "GPS લોક કરો",
+      "saveUpload": "અપલોડ સાચવો",
+      "updateGoal": "લક્ષ્ય અપડેટ કરો",
+      "moveToSavings": "{{amount}} બચતમાં મુકો",
+      "close": "બંધ કરો",
+      "saveQuizProgress": "ક્વિઝ પ્રગતિ સાચવો",
+      "signOut": "સાઇન આઉટ",
+      "approve": "મંજુર કરો",
+      "manualReview": "મેન્યુઅલ સમીક્ષા",
+      "reject": "નકારો"
+    },
+    "fields": {
+      "phoneNumber": "ફોન નંબર",
+      "passcode": "પાસકોડ",
+      "fullName": "પૂર્ણ નામ",
+      "language": "ભાષા",
+      "village": "ગામ",
+      "community": "સમુદાય",
+      "region": "પ્રદેશ",
+      "organization": "સંસ્થા",
+      "adminId": "એડમિન આઈડી",
+      "profileImage": "પ્રોફાઇલ ફોટો",
+      "activityType": "પ્રવૃત્તિ પ્રકાર",
+      "fieldNotes": "ક્ષેત્ર નોંધો",
+      "beforeEvidence": "પહેલાનો પુરાવો",
+      "afterEvidence": "પછીનો પુરાવો",
+      "goalTitle": "લક્ષ્ય શીર્ષક",
+      "goalTarget": "લક્ષ્ય રકમ",
+      "role": "ભૂમિકા"
+    },
+    "labels": {
+      "all": "બધું",
+      "selectImage": "છબી પસંદ કરો",
+      "rewardUnit": "{{count}} CC ઇનામ",
+      "minutesShort": "{{count}} મિનિટ",
+      "queuedCount": "{{count}} કતારમાં",
+      "unsyncedCount": "{{count}} બિન-સિંક",
+      "approvedCount": "{{count}} મંજુર",
+      "guardiansCount": "{{count}} ગાર્ડિયન",
+      "audioProgress": "{{audio}}% ઑડિયો પ્રગતિ · શ્રેષ્ઠ ક્વિઝ {{quiz}}%",
+      "unlockRule": "{{approvals}} મંજૂરી અને {{trust}}+ ટ્રસ્ટ પર ખુલશે",
+      "savedProgress": "{{saved}} / {{target}} બચાવ્યું",
+      "retrySummary": "{{state}} · {{count}} ફરી પ્રયત્ન",
+      "gpsAccuracy": "ચોકસાઈ {{accuracy}}m · {{lat}}, {{lng}}",
+      "lesson": "પાઠ {{index}}"
+    }
+  },
+  "loading": {
+    "title": "તમારું ઑફલાઇન વર્કસ્પેસ તૈયાર થઈ રહ્યું છે",
+    "subtitle": "વિશ્વસનીય અપલોડ, ઇનામ, સાક્ષરતા પ્રગતિ અને NGO સંકલન ફરી લોડ થઈ રહ્યું છે."
+  },
+  "onboarding": {
+    "heroPill": "ઓફલાઇન-ફર્સ્ટ પ્રીમિયમ ફીલ્ડ કામગીરી",
+    "heroDescription": "ઓછી કનેક્ટિવિટી ધરાવતા જંગલ કિનારા સમુદાયો માટેનું સંરક્ષણ મંચ.",
+    "languageTitle": "તમારી ભાષા પસંદ કરો",
+    "languageSubtitle": "તાત્કાલિક બદલો, ઑફલાઇન રહો, અને દરેક સ્ક્રીન સરળતાથી વાંચો."
+  },
+  "dashboard": {
+    "eyebrow": "ગાર્ડિયન વર્કસ્પેસ",
+    "welcomeBack": "ફરી સ્વાગત છે, {{name}}",
+    "trustLabel": "ટ્રસ્ટ",
+    "trustSubtitle": "ક્ષેત્ર વિશ્વસનીયતા સ્કોર",
+    "metrics": {
+      "liveCredits": "લાઇવ ક્રેડિટ",
+      "pendingRewards": "બાકી ઇનામ",
+      "rank": "ક્રમ",
+      "verificationRate": "ચકાસણી દર",
+      "available": "ઉપલબ્ધ",
+      "pending": "બાકી",
+      "saved": "બચત",
+      "goalTarget": "લક્ષ્ય રકમ",
+      "trustScore": "ટ્રસ્ટ સ્કોર",
+      "completedModules": "પૂર્ણ મોડ્યુલ",
+      "queuedUploads": "કતાર અપલોડ",
+      "currentRank": "હાલનો ક્રમ"
+    },
+    "fieldPulse": {
+      "title": "ક્ષેત્ર પલ્સ",
+      "queuedUploads": "કતાર અપલોડ",
+      "awaitingReview": "NGO સમીક્ષા બાકી",
+      "modulesCompleted": "પૂર્ણ મોડ્યુલ"
+    },
+    "leaderboard": {
+      "title": "લીડરબોર્ડ",
+      "badge": "પ્રાદેશિક ક્રમ"
+    },
+    "recentActivities": {
+      "title": "તાજેતરની પ્રવૃત્તિઓ",
+      "emptyTitle": "હજુ સુધી ક્ષેત્ર પ્રવૃત્તિ નથી"
+    }
+  },
+  "uploads": {
+    "title": "ક્ષેત્ર પ્રવૃત્તિ બનાવો",
+    "gpsLocked": "GPS લોક થયું",
+    "gpsWaiting": "GPS રાહ જોઈ રહ્યું છે",
+    "offlineQueueTitle": "ઓફલાઇન કતાર",
+    "queueClearTitle": "કતાર સ્વચ્છ છે",
+    "activities": {
+      "forest-patrol": "વન પેટ્રોલ",
+      "water-source-check": "પાણી સ્રોત તપાસ",
+      "wildlife-sighting": "વન્યજીવ દર્શન",
+      "habitat-restoration": "આવાસ પુનઃસ્થાપન",
+      "fire-risk-report": "આગ જોખમ અહેવાલ"
+    }
+  },
+  "rewards": {
+    "savingsTitle": "બચત રિઝર્વ",
+    "ledgerTitle": "લેજર"
+  },
+  "settings": {
+    "language": {
+      "title": "ભાષા",
+      "subtitle": "એપ કઈ ભાષામાં બોલે તે પસંદ કરો. બદલાવ તરત લાગુ પડશે."
+    },
+    "profile": {
+      "title": "પ્રોફાઇલ અને ઓળખ",
+      "trustTitle": "ટ્રસ્ટ અને સતતતા"
+    }
+  },
+  "literacy": {
+    "journeyTitle": "સાક્ષરતા યાત્રા",
+    "completed": "પૂર્ણ",
+    "unlocked": "ખુલ્યું",
+    "locked": "લોક્ડ",
+    "modules": {
+      "forest-income-basics": {
+        "title": "વન આવકના આધારભૂત તત્ત્વો",
+        "category": "પૈસા વિશ્વાસ"
+      },
+      "savings-habits": {
+        "title": "કપરા સીઝનમાં બચતની ટેવો",
+        "category": "બચત"
+      },
+      "trust-and-credit": {
+        "title": "ટ્રસ્ટ, પુરાવો અને ક્રેડિટ",
+        "category": "ક્રેડિટ તૈયારી"
+      },
+      "family-budget-planning": {
+        "title": "પરિવાર બજેટ યોજના",
+        "category": "બજેટ"
+      },
+      "fraud-and-safety": {
+        "title": "ક્ષેત્રમાં છેતરપિંડી અને સુરક્ષા",
+        "category": "સુરક્ષા"
+      }
+    }
+  },
+  "ngo": {
+    "eyebrow": "એનજીઓ કમાન્ડ",
+    "tabs": {
+      "queue": "ચકાસણી કતાર",
+      "guardians": "ગાર્ડિયન વિશ્લેષણ",
+      "exports": "એક્સપોર્ટ"
+    },
+    "metrics": {
+      "guardians": "ગાર્ડિયન",
+      "flagged": "ફ્લેગ્ડ",
+      "approved": "મંજુર",
+      "liveQueue": "લાઇવ કતાર"
+    },
+    "regionFilter": {
+      "title": "પ્રદેશ ફિલ્ટર"
+    },
+    "queue": {
+      "title": "ચકાસણી કતાર",
+      "noNotes": "ક્ષેત્ર નોંધ જોડાયેલ નથી.",
+      "rewardEstimate": "અંદાજિત ઇનામ: {{amount}} CC",
+      "gpsAccuracy": "GPS ચોકસાઈ: {{accuracy}}m",
+      "sync": "સિંક: {{state}}"
+    },
+    "guardianAnalytics": {
+      "title": "ગાર્ડિયન વિશ્લેષણ",
+      "trust": "ટ્રસ્ટ {{value}}",
+      "verify": "ચકાસણી {{value}}%",
+      "wallet": "વૉલેટ {{value}} CC"
+    },
+    "regionalLeaderboard": {
+      "title": "પ્રાદેશિક લીડરબોર્ડ"
+    },
+    "exports": {
+      "title": "પ્રોગ્રામ એક્સપોર્ટ",
+      "guardianCsv": "ગાર્ડિયન વિશ્લેષણ CSV",
+      "queueCsv": "મોડરેશન કતાર CSV"
+    }
+  },
+  "offline": {
+    "connected": "જોડાયેલ",
+    "offlineFirst": "ઓફલાઇન-ફર્સ્ટ"
+  },
+  "errors": {
+    "generic": "તમારી વિનંતી પ્રક્રિયા કરતી વખતે કંઈક ખોટું થયું.",
+    "duplicatePhone": "આ ફોન નંબર માટે પહેલેથી જ ખાતું છે.",
+    "invalidLogin": "ફોન નંબર અથવા પાસકોડ ખોટો છે.",
+    "savingsExceedsBalance": "બચત ટ્રાન્સફર ઉપલબ્ધ વૉલેટ બેલેન્સ કરતાં વધારે છે."
+  }
+}

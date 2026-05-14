@@ -1,0 +1,63 @@
+export function getLocalizedActivityLabel(activityId, t, fallback = activityId) {
+  return t(`uploads.activities.${activityId}`, {}, fallback)
+}
+
+export function getLocalizedStatus(status, t) {
+  return t(`common.status.${status}`, {}, `${status}`.replaceAll('_', ' '))
+}
+
+export function getLocalizedSyncState(syncState, t) {
+  return t(`common.syncState.${syncState}`, {}, syncState)
+}
+
+export function getLocalizedModule(module, getMessage, t) {
+  const basePath = `literacy.modules.${module.id}`
+  const translatedQuiz = getMessage(`${basePath}.quiz`, null)
+
+  return {
+    ...module,
+    title: t(`${basePath}.title`, {}, module.title),
+    category: t(`${basePath}.category`, {}, module.category),
+    lessons: getMessage(`${basePath}.lessons`, module.lessons),
+    quiz: module.quiz.map((question, index) => ({
+      ...question,
+      prompt: translatedQuiz?.[index]?.prompt ?? question.prompt,
+      answers: translatedQuiz?.[index]?.answers ?? question.answers,
+    })),
+  }
+}
+
+export function formatTransactionDescription(entry, modules, activities, t) {
+  if (entry.type === 'reward') {
+    const activity = activities.find((item) => item.id === entry.referenceId)
+    return t('rewards.ledger.activityReward', {
+      activity: activity
+        ? getLocalizedActivityLabel(activity.activityType, t, activity.activityType)
+        : entry.description,
+    }, entry.description)
+  }
+
+  if (entry.type === 'literacy_reward') {
+    const module = modules.find((item) => item.id === entry.referenceId)
+    const moduleTitle = module ? t(`literacy.modules.${module.id}.title`, {}, module.title) : entry.referenceId
+    return t('rewards.ledger.moduleReward', { module: moduleTitle }, entry.description)
+  }
+
+  if (entry.type === 'savings_transfer') {
+    return t('rewards.ledger.savingsTransfer', {}, entry.description)
+  }
+
+  return entry.description
+}
+
+export function translateRuntimeMessage(message, t) {
+  const runtimeMap = {
+    'An account with this phone number already exists.': 'errors.duplicatePhone',
+    'Phone number or passcode is incorrect.': 'errors.invalidLogin',
+    'Savings transfer exceeds the available wallet balance.': 'errors.savingsExceedsBalance',
+    'Something went wrong while processing your request.': 'errors.generic',
+  }
+
+  const translationKey = runtimeMap[message]
+  return translationKey ? t(translationKey, {}, message) : message
+}

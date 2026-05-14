@@ -1,0 +1,54 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ----------------------------------------------------------------------
+    // HELPER FUNCTIONS
+    // ----------------------------------------------------------------------
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isAudio() {
+      return request.resource.contentType.matches('audio/.*');
+    }
+    
+    function isValidSize() {
+      // 10MB max file size for field uploads
+      return request.resource.size < 10 * 1024 * 1024; 
+    }
+
+    // ----------------------------------------------------------------------
+    // FIELD EVIDENCE UPLOADS
+    // ----------------------------------------------------------------------
+    // Path format: evidence/{userId}/{fileName}
+    match /evidence/{userId}/{fileName} {
+      
+      // Guardians can upload their evidence to their specific folder.
+      // We strictly validate that it is an image/audio file and under 10MB.
+      allow create: if isOwner(userId) && (isImage() || isAudio()) && isValidSize();
+      
+      // Any authenticated user can view the evidence (needed so NGO Admins can review it in the dashboard)
+      allow read: if isAuthenticated();
+      
+      // CRITICAL: Evidence is completely immutable. Once a field worker uploads a photo,
+      // it cannot be deleted or replaced by the client app to prevent tampering.
+      allow update, delete: if false; 
+    }
+    
+    // ----------------------------------------------------------------------
+    // DEFAULT DENY
+    // ----------------------------------------------------------------------
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

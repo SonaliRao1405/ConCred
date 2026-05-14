@@ -1,0 +1,394 @@
+{
+  "meta": {
+    "code": "en",
+    "englishName": "English",
+    "nativeName": "English",
+    "dir": "ltr"
+  },
+  "common": {
+    "appName": "ConservationCred",
+    "nav": {
+      "home": "Home",
+      "field": "Field",
+      "wallet": "Wallet",
+      "learn": "Learn",
+      "profile": "Profile"
+    },
+    "roles": {
+      "guardian": "Guardian",
+      "ngo_admin": "NGO Admin"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "manual_review": "Manual review"
+    },
+    "syncState": {
+      "synced": "synced",
+      "queued": "queued"
+    },
+    "actions": {
+      "login": "Login",
+      "createAccount": "Create account",
+      "enterWorkspace": "Enter workspace",
+      "createWorkspace": "Create workspace",
+      "syncQueue": "Sync queue",
+      "lockGps": "Lock GPS",
+      "saveUpload": "Save upload",
+      "updateGoal": "Update goal",
+      "moveToSavings": "Move {{amount}} to savings",
+      "close": "Close",
+      "saveQuizProgress": "Save quiz progress",
+      "signOut": "Sign out",
+      "approve": "Approve",
+      "manualReview": "Manual review",
+      "reject": "Reject"
+    },
+    "fields": {
+      "phoneNumber": "Phone number",
+      "passcode": "Passcode",
+      "fullName": "Full name",
+      "language": "Language",
+      "village": "Village",
+      "community": "Community",
+      "region": "Region",
+      "organization": "Organization",
+      "adminId": "Admin ID",
+      "profileImage": "Profile image",
+      "activityType": "Activity type",
+      "fieldNotes": "Field notes",
+      "beforeEvidence": "Before evidence",
+      "afterEvidence": "After evidence",
+      "goalTitle": "Goal title",
+      "goalTarget": "Goal target",
+      "role": "Role"
+    },
+    "placeholders": {
+      "phone": "+91 9xxxxxxxxx",
+      "loginPasscode": "Secure field passcode",
+      "signupPasscode": "4-8 digit passcode",
+      "fullName": "Your name",
+      "village": "Village or hamlet",
+      "community": "Community cluster",
+      "guardianRegion": "Western Ghats, Sundarbans, Nilgiris...",
+      "ngoRegion": "Operating region",
+      "organization": "NGO or field program",
+      "adminId": "Program or staff identifier",
+      "fieldNotes": "Describe patrol findings, community response, or restoration work.",
+      "verificationNote": "Add NGO verification note..."
+    },
+    "labels": {
+      "all": "All",
+      "selectImage": "Select image",
+      "notAvailable": "NA",
+      "rewardUnit": "{{count}} CC reward",
+      "minutesShort": "{{count}} min",
+      "queuedCount": "{{count}} queued",
+      "unsyncedCount": "{{count}} unsynced",
+      "approvedCount": "{{count}} approved",
+      "guardiansCount": "{{count}} guardians",
+      "audioProgress": "{{audio}}% audio progress · best quiz {{quiz}}%",
+      "unlockRule": "Unlocks at {{approvals}} approvals and trust {{trust}}+",
+      "savedProgress": "{{saved}} of {{target}} saved",
+      "retrySummary": "{{state}} · {{count}} retries",
+      "gpsAccuracy": "Accuracy {{accuracy}}m · {{lat}}, {{lng}}",
+      "lesson": "Lesson {{index}}"
+    }
+  },
+  "loading": {
+    "title": "Preparing your offline workspace",
+    "subtitle": "Restoring trusted uploads, rewards, literacy progress, and NGO coordination signals."
+  },
+  "onboarding": {
+    "heroPill": "Offline-first premium field operations",
+    "heroDescription": "A deeply polished conservation platform for rural forest-edge communities, trusted by guardians and NGOs in low-connectivity terrain.",
+    "features": {
+      "trust": "Live trust, verification, and moderation",
+      "rewards": "Rewards, savings, and literacy in one mobile workflow",
+      "sync": "Persistent local state with reconnect-ready sync architecture"
+    },
+    "languageTitle": "Choose your language",
+    "languageSubtitle": "Switch instantly, stay offline-first, and keep every screen readable in the field."
+  },
+  "dashboard": {
+    "eyebrow": "Guardian workspace",
+    "welcomeBack": "Welcome back, {{name}}",
+    "heroDescription": "Your conservation record is alive. Upload field proof, protect savings goals, and keep trust rising across your landscape.",
+    "trustLabel": "Trust",
+    "trustSubtitle": "field credibility score",
+    "metrics": {
+      "liveCredits": "Live credits",
+      "pendingRewards": "Pending rewards",
+      "rank": "Rank",
+      "verificationRate": "Verification rate",
+      "available": "Available",
+      "pending": "Pending",
+      "saved": "Saved",
+      "goalTarget": "Goal target",
+      "trustScore": "Trust score",
+      "completedModules": "Completed modules",
+      "queuedUploads": "Queued uploads",
+      "currentRank": "Current rank"
+    },
+    "fieldPulse": {
+      "title": "Field pulse",
+      "subtitle": "Uploads, review flow, and trust movement update live from your activity record.",
+      "queuedUploads": "Queued uploads",
+      "awaitingReview": "Awaiting NGO review",
+      "modulesCompleted": "Modules completed"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "subtitle": "Verified contributions reshape your rank automatically.",
+      "badge": "Regional ranking"
+    },
+    "recentActivities": {
+      "title": "Recent activities",
+      "subtitle": "Every entry below is persistent and updates status when review or sync changes.",
+      "emptyTitle": "No field activities yet",
+      "emptySubtitle": "Your first upload will immediately shape trust, pending rewards, and the regional leaderboard."
+    }
+  },
+  "uploads": {
+    "title": "Create field activity",
+    "subtitle": "Capture evidence, lock GPS, and persist everything offline before the network returns.",
+    "gpsLocked": "GPS locked",
+    "gpsWaiting": "GPS waiting",
+    "gpsHint": "Tap the GPS lock to capture a precise field signal.",
+    "offlineQueueTitle": "Offline queue",
+    "offlineQueueSubtitle": "Queued or weak-signal activities stay persistent and can be retried safely.",
+    "queueClearTitle": "Queue is clear",
+    "queueClearSubtitle": "Uploads are either synced already or ready for NGO review.",
+    "activities": {
+      "forest-patrol": "Forest patrol",
+      "water-source-check": "Water source check",
+      "wildlife-sighting": "Wildlife sighting",
+      "habitat-restoration": "Habitat restoration",
+      "fire-risk-report": "Fire risk report"
+    }
+  },
+  "rewards": {
+    "savingsTitle": "Savings reserve",
+    "savingsSubtitle": "Savings behavior is persistent and feeds trust-building signals.",
+    "ledgerTitle": "Ledger",
+    "ledgerSubtitle": "Rewards, literacy bonuses, and savings movements recalculate live balances.",
+    "ledger": {
+      "activityReward": "{{activity}} verified by NGO",
+      "moduleReward": "{{module}} completed",
+      "savingsTransfer": "Moved into savings reserve"
+    }
+  },
+  "settings": {
+    "language": {
+      "title": "Language",
+      "subtitle": "Choose how the app speaks to you. Changes are instant and saved locally for offline use."
+    },
+    "profile": {
+      "title": "Profile and identity",
+      "subtitle": "Persistent session, role-aware access, and region-specific leaderboard participation.",
+      "trustTitle": "Trust and continuity",
+      "trustSubtitle": "Every approval, savings movement, and module completion keeps this profile alive."
+    }
+  },
+  "literacy": {
+    "journeyTitle": "Literacy journey",
+    "journeySubtitle": "Module unlocks and quiz outcomes persist locally and sync with the broader program state.",
+    "completed": "Completed",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "modules": {
+      "forest-income-basics": {
+        "title": "Forest Income Basics",
+        "category": "Money confidence",
+        "lessons": [
+          "Conservation rewards are strongest when every activity has a clear record, a place, and a purpose.",
+          "Your wallet is not just a number. It is the living record of trusted work across your forest route.",
+          "Separating earned balance, pending rewards, and savings helps households make calmer financial decisions."
+        ],
+        "quiz": [
+          {
+            "prompt": "What strengthens trust in your rewards?",
+            "answers": [
+              "A clear record of work",
+              "Deleting old activities",
+              "Skipping verification"
+            ]
+          },
+          {
+            "prompt": "Why separate savings from available balance?",
+            "answers": [
+              "To protect future goals",
+              "To hide your earnings",
+              "To avoid literacy modules"
+            ]
+          }
+        ]
+      },
+      "savings-habits": {
+        "title": "Savings Habits for Lean Seasons",
+        "category": "Savings",
+        "lessons": [
+          "Small weekly savings movements can matter more than one large move made too late.",
+          "Naming a savings goal helps families keep direction during uncertain income cycles.",
+          "Savings consistency is a signal of future resilience, not just present discipline."
+        ],
+        "quiz": [
+          {
+            "prompt": "What makes a goal easier to protect?",
+            "answers": [
+              "Giving it a clear name",
+              "Moving all funds at once",
+              "Ignoring progress"
+            ]
+          },
+          {
+            "prompt": "What does savings consistency show?",
+            "answers": [
+              "Future resilience",
+              "GPS accuracy",
+              "Photo quality"
+            ]
+          }
+        ]
+      },
+      "trust-and-credit": {
+        "title": "Trust, Proof, and Credit",
+        "category": "Credit readiness",
+        "lessons": [
+          "Trust grows from repeated approvals, honest uploads, and stable participation.",
+          "A high trust score can support future NGO recommendations and credit-readiness conversations.",
+          "Rejected or weakly documented work lowers confidence, so quality matters as much as quantity."
+        ],
+        "quiz": [
+          {
+            "prompt": "What grows trust score fastest?",
+            "answers": [
+              "Consistent approved work",
+              "Many rejected uploads",
+              "Turning off sync"
+            ]
+          },
+          {
+            "prompt": "Why does evidence quality matter?",
+            "answers": [
+              "It improves verification confidence",
+              "It changes your language setting",
+              "It hides ledger history"
+            ]
+          }
+        ]
+      },
+      "family-budget-planning": {
+        "title": "Family Budget Planning",
+        "category": "Budgeting",
+        "lessons": [
+          "A simple budget works best when each rupee or credit has one clear job.",
+          "Irregular income months still benefit from a steady split between essentials, savings, and buffers.",
+          "Budgeting is not restriction. It is protection for future decisions."
+        ],
+        "quiz": [
+          {
+            "prompt": "What is the purpose of a budget?",
+            "answers": [
+              "To give money a plan",
+              "To remove your wallet history",
+              "To replace rewards"
+            ]
+          },
+          {
+            "prompt": "What helps with uneven income months?",
+            "answers": [
+              "A stable savings and essentials split",
+              "Ignoring savings entirely",
+              "Only checking the leaderboard"
+            ]
+          }
+        ]
+      },
+      "fraud-and-safety": {
+        "title": "Fraud and Safety in the Field",
+        "category": "Safety",
+        "lessons": [
+          "Accurate uploads protect both your reputation and the credibility of the community program.",
+          "Device sharing, duplicate evidence, and unclear timestamps create avoidable trust damage.",
+          "Safety means honest reporting, guarded devices, and quick clarification when the NGO requests it."
+        ],
+        "quiz": [
+          {
+            "prompt": "What harms trust quickly?",
+            "answers": [
+              "Duplicate evidence uploads",
+              "Clear explanations",
+              "Strong GPS lock"
+            ]
+          },
+          {
+            "prompt": "What should happen after an NGO clarification request?",
+            "answers": [
+              "Respond with better context",
+              "Delete the activity",
+              "Ignore the queue"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "ngo": {
+    "eyebrow": "NGO command",
+    "tabs": {
+      "queue": "Verification Queue",
+      "guardians": "Guardian Analytics",
+      "exports": "Exports"
+    },
+    "metrics": {
+      "guardians": "Guardians",
+      "flagged": "Flagged",
+      "approved": "Approved",
+      "liveQueue": "Live queue"
+    },
+    "regionFilter": {
+      "title": "Region filter",
+      "subtitle": "Moderation, leaderboard, and guardian analytics update instantly by landscape."
+    },
+    "queue": {
+      "title": "Verification queue",
+      "subtitle": "Approvals and rejections update guardian wallets, trust, and rankings in real time.",
+      "noNotes": "No field notes attached.",
+      "rewardEstimate": "Reward estimate: {{amount}} CC",
+      "gpsAccuracy": "GPS accuracy: {{accuracy}}m",
+      "sync": "Sync: {{state}}",
+      "emptyTitle": "Queue is currently calm",
+      "emptySubtitle": "When guardians upload new field work, moderation cards will appear here automatically."
+    },
+    "guardianAnalytics": {
+      "title": "Guardian analytics",
+      "subtitle": "Trust signals and wallet growth are derived directly from reviewed work.",
+      "trust": "Trust {{value}}",
+      "verify": "Verify {{value}}%",
+      "wallet": "Wallet {{value}} CC"
+    },
+    "regionalLeaderboard": {
+      "title": "Regional leaderboard",
+      "subtitle": "Approved work automatically recalculates rank and impact metrics."
+    },
+    "exports": {
+      "title": "Program exports",
+      "subtitle": "Lightweight field-ready CSVs for donor reports, audits, and regional review.",
+      "guardianCsv": "Guardian analytics CSV",
+      "queueCsv": "Moderation queue CSV",
+      "note": "Exports reflect the latest local-first state, including offline-reviewed changes."
+    }
+  },
+  "offline": {
+    "connected": "Connected",
+    "offlineFirst": "Offline first"
+  },
+  "errors": {
+    "generic": "Something went wrong while processing your request.",
+    "duplicatePhone": "An account with this phone number already exists.",
+    "invalidLogin": "Phone number or passcode is incorrect.",
+    "savingsExceedsBalance": "Savings transfer exceeds the available wallet balance."
+  }
+}

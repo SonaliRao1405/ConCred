@@ -161,6 +161,22 @@ export function NgoDashboard({ platform, actions, isOnline, busyKey }) {
                   </StatusPill>
                 </div>
                 <p>{activity.notes || t('ngo.queue.noNotes')}</p>
+                <div className="queue-card__facts">
+                  <span>{`${t('common.fields.userId', {}, 'User ID')}: ${guardian?.publicUserId || guardian?.id || activity.userId}`}</span>
+                  <span>{`${t('common.fields.activityId', {}, 'Activity ID')}: ${activity.id}`}</span>
+                  <span>{t('ngo.queue.rewardEstimate', { amount: activity.rewardEstimate }, `Reward estimate: ${activity.rewardEstimate} CC`)}</span>
+                  <span>{t('ngo.queue.gpsAccuracy', { accuracy: activity.gps?.accuracy ?? t('common.labels.notAvailable', {}, 'NA') }, `GPS accuracy: ${activity.gps?.accuracy ?? 'NA'}m`)}</span>
+                  <span>{t('ngo.queue.sync', { state: getLocalizedSyncState(activity.syncState, t) }, `Sync: ${activity.syncState}`)}</span>
+                  {activity.verification?.duplicateSourceActivityId ? (
+                    <span>{`${t('ngo.queue.duplicateBlocked', {}, 'Duplicate blocked')}: ${activity.verification.duplicateSourceActivityId}`}</span>
+                  ) : null}
+                  {activity.verification?.locationConflictActivityId ? (
+                    <span>{`${t('ngo.queue.locationConflict', {}, 'Location conflict')}: ${activity.verification.locationConflictActivityId}`}</span>
+                  ) : null}
+                  {activity.verification?.locationDistanceMeters ? (
+                    <span>{t('common.labels.distanceMeters', { value: activity.verification.locationDistanceMeters }, `${activity.verification.locationDistanceMeters}m away`)}</span>
+                  ) : null}
+                </div>
                 {(activity.beforeEvidence || activity.afterEvidence) ? (
                   <div className="queue-evidence-grid">
                     {[
@@ -191,17 +207,13 @@ export function NgoDashboard({ platform, actions, isOnline, busyKey }) {
                               }, `Captured ${evidence.capturedAt ? new Date(evidence.capturedAt).toLocaleString(language) : 'NA'}`)}
                             </strong>
                             <small>{t('ngo.queue.captureSource', { source: evidence.source || 'unknown' }, `Source: ${evidence.source || 'unknown'}`)}</small>
+                            <small>{`${t('common.fields.imageId', {}, 'Image ID')}: ${evidence.imageId || t('common.labels.notAvailable', {}, 'NA')}`}</small>
                           </div>
                         </div>
                       )
                     })}
                   </div>
                 ) : null}
-                <div className="queue-card__facts">
-                  <span>{t('ngo.queue.rewardEstimate', { amount: activity.rewardEstimate }, `Reward estimate: ${activity.rewardEstimate} CC`)}</span>
-                  <span>{t('ngo.queue.gpsAccuracy', { accuracy: activity.gps?.accuracy ?? t('common.labels.notAvailable', {}, 'NA') }, `GPS accuracy: ${activity.gps?.accuracy ?? 'NA'}m`)}</span>
-                  <span>{t('ngo.queue.sync', { state: getLocalizedSyncState(activity.syncState, t) }, `Sync: ${activity.syncState}`)}</span>
-                </div>
                 <textarea
                   rows="3"
                   value={noteDrafts[activity.id] ?? activity.reviewerNote ?? ''}
@@ -300,19 +312,27 @@ export function NgoDashboard({ platform, actions, isOnline, busyKey }) {
                 downloadCsv('activity-queue.csv', [
                   [
                     t('ngo.metrics.guardians'),
+                    t('common.fields.userId', {}, 'User ID'),
+                    t('common.fields.activityId', {}, 'Activity ID'),
                     t('common.fields.activityType'),
                     t('common.fields.region'),
                     t('common.status.pending'),
                     t('dashboard.metrics.pendingRewards'),
                     t('offline.connected'),
+                    t('ngo.queue.duplicateBlocked', {}, 'Duplicate blocked'),
+                    t('ngo.queue.locationConflict', {}, 'Location conflict'),
                   ],
                   ...queueRows.map(({ guardian, activity }) => [
                     guardian?.name,
+                    guardian?.publicUserId || guardian?.id || activity.userId,
+                    activity.id,
                     getLocalizedActivityLabel(activity.activityType, t, activity.activityType),
                     activity.region,
                     getLocalizedStatus(activity.status, t),
                     activity.rewardEstimate,
                     getLocalizedSyncState(activity.syncState, t),
+                    activity.verification?.duplicateSourceActivityId || '',
+                    activity.verification?.locationConflictActivityId || '',
                   ]),
                 ])
               }

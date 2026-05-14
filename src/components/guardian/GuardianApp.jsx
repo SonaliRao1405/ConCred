@@ -103,6 +103,10 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
     100,
     Math.round(((savingsGoal?.savedAmount ?? 0) / (savingsGoal?.targetAmount || 1)) * 100),
   )
+  const hasReliableGpsLock =
+    typeof activityForm.gps?.lat === 'number' &&
+    typeof activityForm.gps?.lng === 'number' &&
+    (activityForm.gps?.accuracy ?? Number.POSITIVE_INFINITY) <= 100
   const captureDetails = {
     beforeImage: {
       buttonLabel: t('common.actions.captureBefore'),
@@ -153,12 +157,7 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
       () => {
         setActivityForm((current) => ({
           ...current,
-          gps: {
-            lat: 11.0168,
-            lng: 76.9558,
-            accuracy: 120,
-            lockedAt: new Date().toISOString(),
-          },
+          gps: null,
         }))
       },
       { enableHighAccuracy: true, timeout: 5000 },
@@ -299,6 +298,7 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
               <div>
                 <strong>{getLocalizedActivityLabel(activity.activityType, t, activity.activityType)}</strong>
                 <span>{new Date(activity.createdAt).toLocaleString(language)}</span>
+                <small>{`${t('common.fields.activityId', {}, 'Activity ID')}: ${activity.id}`}</small>
               </div>
               <div className="activity-row__meta">
                 <StatusPill tone={getStatusTone(activity.status)}>
@@ -375,6 +375,7 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
                             value: new Date(evidence.capturedAt).toLocaleString(language),
                           }, `Captured ${new Date(evidence.capturedAt).toLocaleString(language)}`)}
                         </small>
+                        <small>{`${t('common.fields.imageId', {}, 'Image ID')}: ${evidence.imageId || t('common.labels.notAvailable', {}, 'NA')}`}</small>
                       </div>
                     </div>
                   ) : (
@@ -427,7 +428,12 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
           <button
             type="submit"
             className="primary-button"
-            disabled={busyKey === 'create-activity' || !activityForm.beforeImage || !activityForm.afterImage}
+            disabled={
+              busyKey === 'create-activity' ||
+              !activityForm.beforeImage ||
+              !activityForm.afterImage ||
+              !hasReliableGpsLock
+            }
           >
             <UploadCloud size={16} />
             {t('common.actions.saveUpload')}
@@ -450,6 +456,7 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
           assignCapture(captureSlot, evidence)
         }}
         onClose={() => setCaptureSlot(null)}
+        gps={hasReliableGpsLock ? activityForm.gps : null}
         t={t}
         title={
           captureSlot === 'afterImage'
@@ -708,6 +715,10 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
             <div>
               <span>{t('common.fields.role')}</span>
               <strong>{t(`common.roles.${user.role}`, {}, user.role)}</strong>
+            </div>
+            <div>
+              <span>{t('common.fields.userId')}</span>
+              <strong>{user.publicUserId || user.id}</strong>
             </div>
             <div>
               <span>{t('common.fields.language')}</span>

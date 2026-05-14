@@ -21,6 +21,8 @@ import {
   where,
 } from '../config/firebase'
 import { literacyModules } from '../content/modules'
+import { buildGuardianPublicId, evaluateActivityIntegrity } from '../lib/activityIntegrity.js'
+import { computeDataUrlFingerprint, createEvidenceImageId } from '../lib/imageFingerprint.js'
 import { clearRootState, readRootState, writeRootState } from '../services/localDatabase'
 
 const activityCatalog = [
@@ -150,7 +152,11 @@ async function normalizeEvidenceInput(evidenceInput, fallbackLabel) {
     return {
       capturedAt: evidenceInput.capturedAt || new Date().toISOString(),
       dataUrl: evidenceInput.dataUrl,
+      gpsSnapshot: evidenceInput.gpsSnapshot || null,
       height: evidenceInput.height ?? null,
+      imageFingerprint: evidenceInput.imageFingerprint || (await computeDataUrlFingerprint(evidenceInput.dataUrl)),
+      imageHash: evidenceInput.imageHash || (await hashValue(evidenceInput.dataUrl)),
+      imageId: evidenceInput.imageId || createEvidenceImageId(),
       mimeType: evidenceInput.mimeType || 'image/jpeg',
       name: evidenceInput.name || `${fallbackLabel}-${Date.now()}.jpg`,
       source: evidenceInput.source || 'in-app-camera',
@@ -158,10 +164,15 @@ async function normalizeEvidenceInput(evidenceInput, fallbackLabel) {
     }
   }
 
+  const evidenceDataUrl = await fileToDataUrl(evidenceInput)
   return {
     capturedAt: new Date().toISOString(),
-    dataUrl: await fileToDataUrl(evidenceInput),
+    dataUrl: evidenceDataUrl,
+    gpsSnapshot: null,
     height: null,
+    imageFingerprint: await computeDataUrlFingerprint(evidenceDataUrl),
+    imageHash: await hashValue(evidenceDataUrl),
+    imageId: createEvidenceImageId(),
     mimeType: evidenceInput.type || 'image/jpeg',
     name: evidenceInput.name || `${fallbackLabel}-${Date.now()}.jpg`,
     source: 'legacy-file-input',
@@ -279,6 +290,7 @@ function enrichUser(user, state) {
   const wallet = deriveWallet(user.id, state)
   return {
     ...user,
+    publicUserId: user.publicUserId || buildGuardianPublicId(user.role, user.id),
     trustScore: deriveTrustScore(user.id, state),
     verificationRate: deriveVerificationRate(user.id, state),
     walletBalance: wallet.availableBalance,
@@ -448,6 +460,7 @@ export async function signUp(payload) {
   const user = {
     id: userId,
     authUid,
+    publicUserId: buildGuardianPublicId(payload.role, userId),
     role: payload.role,
     name: payload.name,
     phone,
@@ -592,8 +605,8 @@ export async function deleteAccount(userId) {
 
 export async function createActivity(userId, payload, options) {
   const state = await readState()
-  const evidenceBefore = await normalizeEvidenceInput(payload.beforeImage, 'before-evidence')
-  const evidenceAfter = await normalizeEvidenceInput(payload.afterImage, 'after-evidence')
+  let evidenceBefore = await normalizeEvidenceInput(payload.beforeImage, 'before-evidence')
+  let evidenceAfter = await normalizeEvidenceInput(payload.afterImage, 'after-evidence')
 
   if (!evidenceBefore || !evidenceAfter) {
     throw new Error('Both before and after evidence must be captured in-app before saving this activity.')
@@ -602,6 +615,27 @@ export async function createActivity(userId, payload, options) {
   if ([evidenceBefore, evidenceAfter].some((evidence) => evidence.source !== 'in-app-camera')) {
     throw new Error('Evidence must be captured directly in the app camera.')
   }
+
+  if (
+    !payload.gps ||
+    typeof payload.gps.lat !== 'number' ||
+    typeof payload.gps.lng !== 'number'
+  ) {
+    throw new Error('Lock GPS before saving this activity.')
+  }
+
+  if ((payload.gps.accuracy ?? Number.POSITIVE_INFINITY) > 100) {
+    throw new Error('GPS signal is too weak to verify this claim. Try locking GPS again.')
+  }
+
+  const gpsSnapshot = {
+    accuracy: payload.gps.accuracy ?? null,
+    lat: payload.gps.lat,
+    lng: payload.gps.lng,
+    lockedAt: payload.gps.lockedAt ?? new Date().toISOString(),
+  }
+  evidenceBefore = evidenceBefore.gpsSnapshot ? evidenceBefore : { ...evidenceBefore, gpsSnapshot }
+  evidenceAfter = evidenceAfter.gpsSnapshot ? evidenceAfter : { ...evidenceAfter, gpsSnapshot }
 
   const trustScore = deriveTrustScore(userId, state)
   const rewardEstimate = calculateReward(
@@ -634,6 +668,34 @@ export async function createActivity(userId, payload, options) {
     beforeEvidence: evidenceBefore,
     afterEvidence: evidenceAfter,
     reviewerNote: '',
+    verification: {
+      claimTimestamp: evidenceBefore.capturedAt || new Date().toISOString(),
+      duplicateImageId: null,
+      duplicateSourceActivityId: null,
+      imageFingerprints: [evidenceBefore.imageFingerprint, evidenceAfter.imageFingerprint],
+      imageIds: [evidenceBefore.imageId, evidenceAfter.imageId],
+      imageHashes: [evidenceBefore.imageHash, evidenceAfter.imageHash],
+      locationConflictActivityId: null,
+      locationConflictUserId: null,
+      locationDistanceMeters: null,
+    },
+  }
+
+  const integrityResult = evaluateActivityIntegrity(state, activity)
+
+  if (!integrityResult.accepted) {
+    if (integrityResult.duplicateMatch) {
+      activity.verification.duplicateImageId = integrityResult.duplicateMatch.imageId
+      activity.verification.duplicateSourceActivityId = integrityResult.duplicateMatch.activityId
+    }
+
+    if (integrityResult.conflict) {
+      activity.verification.locationConflictActivityId = integrityResult.conflict.activity.id
+      activity.verification.locationConflictUserId = integrityResult.conflict.activity.userId
+      activity.verification.locationDistanceMeters = Math.round(integrityResult.conflict.distanceMeters)
+    }
+
+    throw new Error(integrityResult.message)
   }
 
   if (firebaseEnabled && options.isOnline) {
@@ -688,6 +750,32 @@ export async function reviewActivity(activityId, decision, reviewerId, note) {
   const activity = state.activities.find((item) => item.id === activityId)
   if (!activity) {
     return hydrateState(state)
+  }
+
+  const integrityResult = evaluateActivityIntegrity(state, activity)
+
+  if (decision === 'approved' && !integrityResult.accepted) {
+    if (integrityResult.duplicateMatch) {
+      activity.verification = {
+        ...(activity.verification ?? {}),
+        duplicateImageId: integrityResult.duplicateMatch.imageId,
+        duplicateSourceActivityId: integrityResult.duplicateMatch.activityId,
+      }
+    }
+
+    if (integrityResult.conflict) {
+      activity.verification = {
+        ...(activity.verification ?? {}),
+        locationConflictActivityId: integrityResult.conflict.activity.id,
+        locationConflictUserId: integrityResult.conflict.activity.userId,
+        locationDistanceMeters: Math.round(integrityResult.conflict.distanceMeters),
+      }
+    }
+
+    activity.status = 'rejected'
+    activity.reviewerNote = integrityResult.message
+    activity.flagged = true
+    return hydrateState(await writeState(state))
   }
 
   activity.status = decision

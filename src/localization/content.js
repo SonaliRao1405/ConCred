@@ -66,6 +66,13 @@ export function translateRuntimeMessage(message, t) {
     'Both before and after evidence must be captured in-app before saving this activity.':
       'errors.capturePairRequired',
     'Evidence must be captured directly in the app camera.': 'errors.cameraOnlyEvidence',
+    'Lock GPS before saving this activity.': 'errors.gpsRequired',
+    'GPS signal is too weak to verify this claim. Try locking GPS again.': 'errors.gpsWeak',
+    'Before and after images must be different captures.': 'errors.sameImagePair',
+    'This image has already been used in another activity and cannot be uploaded again.':
+      'errors.duplicateEvidence',
+    'This work location has already been claimed by an earlier capture and cannot be uploaded again.':
+      'errors.duplicateLocationClaim',
     'Please sign in again before deleting this account.': 'errors.reauthDelete',
     'Something went wrong while processing your request.': 'errors.generic',
   }

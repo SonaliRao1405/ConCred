@@ -5,6 +5,7 @@ import { GlassPanel } from '../shared/Primitives'
 
 export function CameraCaptureSheet({
   captureLabel,
+  gps,
   isOpen,
   language,
   onCapture,
@@ -133,6 +134,7 @@ export function CameraCaptureSheet({
     try {
       const nextPreview = captureEvidenceFrame(videoRef.current, {
         evidenceLabel: captureLabel,
+        gps,
         locale: language,
       })
       setPreview(nextPreview)
@@ -189,6 +191,18 @@ export function CameraCaptureSheet({
                   }, `Captured ${new Date(preview.capturedAt).toLocaleString(language)}`)
                 : t('uploads.captureTimestampPending')}
             </strong>
+            {preview?.imageId ? (
+              <small>{`${t('common.fields.imageId', {}, 'Image ID')}: ${preview.imageId}`}</small>
+            ) : null}
+            {typeof preview?.gpsSnapshot?.lat === 'number' && typeof preview?.gpsSnapshot?.lng === 'number' ? (
+              <small>
+                {t('common.labels.gpsAccuracy', {
+                  accuracy: preview.gpsSnapshot.accuracy ?? t('common.labels.notAvailable', {}, 'NA'),
+                  lat: preview.gpsSnapshot.lat.toFixed(4),
+                  lng: preview.gpsSnapshot.lng.toFixed(4),
+                }, `Accuracy ${preview.gpsSnapshot.accuracy ?? 'NA'}m · ${preview.gpsSnapshot.lat.toFixed(4)}, ${preview.gpsSnapshot.lng.toFixed(4)}`)}
+              </small>
+            ) : null}
           </div>
 
           <div className="inline-actions">

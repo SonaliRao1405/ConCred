@@ -69,7 +69,10 @@
       "afterEvidence": "After evidence",
       "goalTitle": "Goal title",
       "goalTarget": "Goal target",
-      "role": "Role"
+      "role": "Role",
+      "userId": "User ID",
+      "activityId": "Activity ID",
+      "imageId": "Image ID"
     },
     "placeholders": {
       "phone": "+91 9xxxxxxxxx",
@@ -90,6 +93,7 @@
       "selectImage": "Select image",
       "cameraOnly": "Captured in-app only",
       "capturedAt": "Captured {{value}}",
+      "distanceMeters": "{{value}}m away",
       "notAvailable": "NA",
       "rewardUnit": "{{count}} CC reward",
       "minutesShort": "{{count}} min",
@@ -382,6 +386,8 @@
       "noNotes": "No field notes attached.",
       "noEvidenceCaptured": "No capture attached",
       "captureSource": "Source: {{source}}",
+      "duplicateBlocked": "Duplicate blocked",
+      "locationConflict": "Location conflict",
       "rewardEstimate": "Reward estimate: {{amount}} CC",
       "gpsAccuracy": "GPS accuracy: {{accuracy}}m",
       "sync": "Sync: {{state}}",
@@ -423,6 +429,11 @@
     "savingsExceedsBalance": "Savings transfer exceeds the available wallet balance.",
     "capturePairRequired": "Both before and after evidence must be captured in-app before saving this activity.",
     "cameraOnlyEvidence": "Evidence must be captured directly in the app camera.",
-    "reauthDelete": "Please sign in again before deleting this account."
+    "gpsRequired": "Lock GPS before saving this activity.",
+    "gpsWeak": "GPS signal is too weak to verify this claim. Try locking GPS again.",
+    "reauthDelete": "Please sign in again before deleting this account.",
+    "sameImagePair": "Before and after images must be different captures.",
+    "duplicateEvidence": "This image has already been used in another activity and cannot be uploaded again.",
+    "duplicateLocationClaim": "This work location has already been claimed by an earlier capture and cannot be uploaded again."
   }
 }

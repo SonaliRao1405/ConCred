@@ -45,6 +45,7 @@
       "updateGoal": "Update goal",
       "moveToSavings": "Move {{amount}} to savings",
       "close": "Close",
+      "deleteAccount": "Delete account",
       "saveQuizProgress": "Save quiz progress",
       "signOut": "Sign out",
       "approve": "Approve",
@@ -170,6 +171,7 @@
     "cameraAccessError": "Camera access was blocked or is unavailable on this device.",
     "cameraReadyError": "The camera feed is still warming up. Try again in a moment.",
     "startingCamera": "Starting camera",
+    "cameraPreparing": "Preparing camera",
     "liveCamera": "Live camera",
     "capturePreviewReady": "Capture ready",
     "captureTimestampPending": "Timestamp will appear after capture.",
@@ -209,7 +211,8 @@
       "title": "Profile and identity",
       "subtitle": "Persistent session, role-aware access, and region-specific leaderboard participation.",
       "trustTitle": "Trust and continuity",
-      "trustSubtitle": "Every approval, savings movement, and module completion keeps this profile alive."
+      "trustSubtitle": "Every approval, savings movement, and module completion keeps this profile alive.",
+      "deleteConfirm": "Delete this account and all local activity history?"
     }
   },
   "literacy": {
@@ -413,10 +416,13 @@
     "duplicatePhone": "An account with this phone number already exists.",
     "invalidLogin": "Phone number or passcode is incorrect.",
     "noAccountsOnUrl": "No saved accounts exist on this app URL yet. If you signed up on another port or on localhost instead of 127.0.0.1, reopen that exact URL to log in.",
+    "noAccountsInBrowser": "No saved accounts exist in this browser yet. To keep the same account across deployments and devices, connect Firebase for cloud-backed sign-in.",
+    "phoneNotFound": "No saved account matches this phone number in this app.",
     "phoneNotFoundOnUrl": "No saved account matches this phone number on the current app URL.",
     "incorrectPasscode": "The passcode is incorrect for this saved account.",
     "savingsExceedsBalance": "Savings transfer exceeds the available wallet balance.",
     "capturePairRequired": "Both before and after evidence must be captured in-app before saving this activity.",
-    "cameraOnlyEvidence": "Evidence must be captured directly in the app camera."
+    "cameraOnlyEvidence": "Evidence must be captured directly in the app camera.",
+    "reauthDelete": "Please sign in again before deleting this account."
   }
 }

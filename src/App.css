@@ -162,6 +162,10 @@ img {
   padding-inline: 0;
 }
 
+.danger-text {
+  color: var(--alert);
+}
+
 .loading-screen,
 .auth-shell {
   min-height: 100vh;

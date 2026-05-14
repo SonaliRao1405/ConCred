@@ -3,6 +3,7 @@ import {
   bootstrapPlatform,
   completeModuleQuiz,
   createActivity,
+  deleteAccount,
   moveToSavings,
   reviewActivity,
   saveModuleProgress,
@@ -70,6 +71,7 @@ export function AppProvider({ children }) {
     actions: {
       login: (payload) => runTask('login', () => signIn(payload)),
       logout: () => runTask('logout', () => signOut()),
+      deleteAccount: () => runTask('delete-account', () => deleteAccount(platform.sessionUser.id)),
       signup: (payload) => runTask('signup', () => signUp(payload)),
       createActivity: (payload) =>
         runTask('create-activity', () => createActivity(platform.sessionUser.id, payload, { isOnline })),

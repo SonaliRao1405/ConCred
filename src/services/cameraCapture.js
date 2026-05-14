@@ -26,13 +26,20 @@ export function stopCameraStream(stream) {
 }
 
 export function captureEvidenceFrame(videoElement, { evidenceLabel, locale = 'en-IN' } = {}) {
-  if (!videoElement?.videoWidth || !videoElement?.videoHeight) {
+  const width =
+    videoElement?.videoWidth ||
+    Math.round((videoElement?.clientWidth || 0) * (window.devicePixelRatio || 1)) ||
+    0
+  const height =
+    videoElement?.videoHeight ||
+    Math.round((videoElement?.clientHeight || 0) * (window.devicePixelRatio || 1)) ||
+    0
+
+  if (!width || !height) {
     throw new Error('Camera preview is not ready yet.')
   }
 
   const capturedAt = new Date()
-  const width = videoElement.videoWidth
-  const height = videoElement.videoHeight
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')
 

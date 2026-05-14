@@ -123,6 +123,16 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
     }
   }
 
+  function requestDeleteAccount() {
+    const shouldDelete = window.confirm(t('settings.profile.deleteConfirm'))
+
+    if (!shouldDelete || !actions.deleteAccount) {
+      return
+    }
+
+    void actions.deleteAccount()
+  }
+
   async function captureLocation() {
     if (!navigator.geolocation) {
       return
@@ -727,9 +737,14 @@ export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
           <MetricTile label={t('dashboard.metrics.queuedUploads')} value={derived.queueCount} icon={UploadCloud} tone="warning" />
           <MetricTile label={t('dashboard.metrics.currentRank')} value={`#${currentRank}`} icon={Flame} tone="accent" />
         </div>
-        <button type="button" className="secondary-button" onClick={() => actions.logout()}>
-          {t('common.actions.signOut')}
-        </button>
+        <div className="inline-actions">
+          <button type="button" className="secondary-button" onClick={() => actions.logout()}>
+            {t('common.actions.signOut')}
+          </button>
+          <button type="button" className="ghost-button danger-text" onClick={requestDeleteAccount}>
+            {t('common.actions.deleteAccount')}
+          </button>
+        </div>
       </GlassPanel>
     </div>
   )

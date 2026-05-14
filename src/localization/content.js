@@ -55,6 +55,9 @@ export function translateRuntimeMessage(message, t) {
     'An account with this phone number already exists.': 'errors.duplicatePhone',
     'Phone number or passcode is incorrect.': 'errors.invalidLogin',
     'Savings transfer exceeds the available wallet balance.': 'errors.savingsExceedsBalance',
+    'No saved accounts exist in this browser yet. If you want the same account across deployments and devices, connect Firebase for cloud-backed sign-in.':
+      'errors.noAccountsInBrowser',
+    'No saved account matches this phone number in this app.': 'errors.phoneNotFound',
     'No saved accounts exist on this app URL yet. If you signed up on another port or on localhost instead of 127.0.0.1, reopen that exact URL to log in.':
       'errors.noAccountsOnUrl',
     'No saved account matches this phone number on the current app URL.':
@@ -63,6 +66,7 @@ export function translateRuntimeMessage(message, t) {
     'Both before and after evidence must be captured in-app before saving this activity.':
       'errors.capturePairRequired',
     'Evidence must be captured directly in the app camera.': 'errors.cameraOnlyEvidence',
+    'Please sign in again before deleting this account.': 'errors.reauthDelete',
     'Something went wrong while processing your request.': 'errors.generic',
   }
 

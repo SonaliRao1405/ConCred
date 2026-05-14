@@ -4,10 +4,22 @@ import {
   setPersistence,
   browserLocalPersistence,
   createUserWithEmailAndPassword,
+  deleteUser,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from 'firebase/auth'
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  limit,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore'
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage'
 
 const firebaseConfig = {
@@ -37,16 +49,23 @@ if (firebaseEnabled) {
 export {
   auth,
   browserLocalPersistence,
+  collection,
   createUserWithEmailAndPassword,
   db,
+  deleteDoc,
+  deleteUser,
   doc,
   firebaseEnabled,
   firebaseSignOut,
   getDoc,
+  getDocs,
   getDownloadURL,
+  limit,
+  query,
   ref,
   setDoc,
   signInWithEmailAndPassword,
   storage,
   uploadString,
+  where,
 }

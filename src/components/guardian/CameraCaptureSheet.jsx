@@ -15,12 +15,14 @@ export function CameraCaptureSheet({
   const videoRef = useRef(null)
   const streamRef = useRef(null)
   const [error, setError] = useState('')
+  const [isCameraReady, setIsCameraReady] = useState(false)
   const [isStarting, setIsStarting] = useState(false)
   const [preview, setPreview] = useState(null)
 
   useEffect(() => {
     if (!isOpen) {
       setError('')
+      setIsCameraReady(false)
       setPreview(null)
       setIsStarting(false)
       stopCameraStream(streamRef.current)
@@ -37,6 +39,7 @@ export function CameraCaptureSheet({
       try {
         setIsStarting(true)
         setError('')
+        setIsCameraReady(false)
         const stream = await startCameraStream()
         if (cancelled) {
           stopCameraStream(stream)
@@ -47,7 +50,55 @@ export function CameraCaptureSheet({
         if (videoRef.current) {
           videoRef.current.srcObject = stream
           await videoRef.current.play()
+          await new Promise((resolve, reject) => {
+            const videoElement = videoRef.current
+
+            if (!videoElement) {
+              reject(new Error('missing-video'))
+              return
+            }
+
+            if (videoElement.readyState >= 2 && videoElement.videoWidth > 0) {
+              resolve()
+              return
+            }
+
+            const timeoutId = window.setTimeout(() => {
+              cleanup()
+              reject(new Error('camera-timeout'))
+            }, 5000)
+
+            const cleanup = () => {
+              window.clearTimeout(timeoutId)
+              videoElement.removeEventListener('loadeddata', handleReady)
+              videoElement.removeEventListener('canplay', handleReady)
+              videoElement.removeEventListener('playing', handleReady)
+              videoElement.removeEventListener('error', handleFailure)
+            }
+
+            const handleReady = () => {
+              cleanup()
+              resolve()
+            }
+
+            const handleFailure = () => {
+              cleanup()
+              reject(new Error('camera-stream-failed'))
+            }
+
+            videoElement.addEventListener('loadeddata', handleReady)
+            videoElement.addEventListener('canplay', handleReady)
+            videoElement.addEventListener('playing', handleReady)
+            videoElement.addEventListener('error', handleFailure)
+          })
+
+          if (videoRef.current?.requestVideoFrameCallback) {
+            await new Promise((resolve) => {
+              videoRef.current.requestVideoFrameCallback(() => resolve())
+            })
+          }
         }
+        setIsCameraReady(true)
       } catch {
         setError(t('uploads.cameraAccessError'))
       } finally {
@@ -74,6 +125,11 @@ export function CameraCaptureSheet({
   }
 
   const handleCapture = () => {
+    if (!isCameraReady) {
+      setError(t('uploads.cameraReadyError'))
+      return
+    }
+
     try {
       const nextPreview = captureEvidenceFrame(videoRef.current, {
         evidenceLabel: captureLabel,
@@ -152,10 +208,14 @@ export function CameraCaptureSheet({
                 type="button"
                 className="primary-button"
                 onClick={handleCapture}
-                disabled={Boolean(error) || isStarting}
+                disabled={Boolean(error) || isStarting || !isCameraReady}
               >
                 {isStarting ? <RefreshCw size={16} className="spin-lite" /> : <Camera size={16} />}
-                {isStarting ? t('uploads.startingCamera') : t('common.actions.capturePhoto')}
+                {isStarting
+                  ? t('uploads.startingCamera')
+                  : !isCameraReady
+                    ? t('uploads.cameraPreparing')
+                    : t('common.actions.capturePhoto')}
               </button>
             )}
             <button type="button" className="ghost-button" onClick={onClose}>

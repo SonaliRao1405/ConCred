@@ -1,20 +1,27 @@
 import {
   auth,
+  collection,
   createUserWithEmailAndPassword,
   db,
+  deleteDoc,
+  deleteUser,
   doc,
   firebaseEnabled,
   firebaseSignOut,
   getDoc,
+  getDocs,
   getDownloadURL,
+  limit,
+  query,
   ref,
   setDoc,
   signInWithEmailAndPassword,
   storage,
   uploadString,
+  where,
 } from '../config/firebase'
 import { literacyModules } from '../content/modules'
-import { readRootState, writeRootState } from '../services/localDatabase'
+import { clearRootState, readRootState, writeRootState } from '../services/localDatabase'
 
 const activityCatalog = [
   { id: 'forest-patrol', label: 'Forest patrol', baseReward: 18 },
@@ -306,6 +313,50 @@ async function mirrorUserToFirebase(user) {
   if (!firebaseEnabled || !db) return
   const { pinHash, ...safeUser } = user
   await setDoc(doc(db, 'users', user.id), safeUser, { merge: true })
+
+  if (user.authUid && user.authUid !== user.id) {
+    await setDoc(doc(db, 'users', user.authUid), safeUser, { merge: true })
+  }
+}
+
+async function fetchCloudUserByAuthUid(authUid) {
+  if (!firebaseEnabled || !db || !authUid) {
+    return null
+  }
+
+  const directSnapshot = await getDoc(doc(db, 'users', authUid))
+  if (directSnapshot.exists()) {
+    return directSnapshot.data()
+  }
+
+  const authQuery = query(collection(db, 'users'), where('authUid', '==', authUid), limit(1))
+  const authMatches = await getDocs(authQuery)
+  if (!authMatches.empty) {
+    return authMatches.docs[0].data()
+  }
+
+  return null
+}
+
+function mergeCloudUserIntoState(state, cloudUser) {
+  if (!cloudUser) {
+    return null
+  }
+
+  const existingIndex = state.users.findIndex(
+    (user) => user.id === cloudUser.id || user.authUid === cloudUser.authUid,
+  )
+
+  if (existingIndex >= 0) {
+    state.users[existingIndex] = {
+      ...state.users[existingIndex],
+      ...cloudUser,
+    }
+    return state.users[existingIndex]
+  }
+
+  state.users.push(cloudUser)
+  return cloudUser
 }
 
 async function uploadProfileImage(userId, imageDataUrl) {
@@ -337,10 +388,10 @@ export async function bootstrapPlatform() {
     if (localUser && state.session.userId !== localUser.id) {
       state.session.userId = localUser.id
     } else if (!localUser) {
-      const snapshot = await getDoc(doc(db, 'users', firebaseUserId))
-      if (snapshot.exists()) {
-        state.users.push(snapshot.data())
-        state.session.userId = snapshot.data().id
+      const cloudUser = await fetchCloudUserByAuthUid(firebaseUserId)
+      if (cloudUser) {
+        const mergedUser = mergeCloudUserIntoState(state, cloudUser)
+        state.session.userId = mergedUser.id
         await writeState(state)
       }
     }
@@ -441,18 +492,32 @@ export async function signIn(payload) {
   const pin = normalizePinValue(payload.pin)
   const normalizedPinHash = await hashValue(pin)
   const legacyPinHash = await hashValue(payload.pin)
-  const matchedPhoneUser = state.users.find((entry) =>
+  let matchedPhoneUser = state.users.find((entry) =>
     matchesStoredPhone(entry, normalizedPhone, normalizedPhoneHash, legacyPhoneHash),
   )
+
+  if (!matchedPhoneUser && firebaseEnabled && auth) {
+    try {
+      const email = buildAuthEmail(normalizedPhone)
+      await signInWithEmailAndPassword(auth, email, pin)
+      const cloudUser = await fetchCloudUserByAuthUid(auth.currentUser?.uid)
+
+      if (cloudUser) {
+        matchedPhoneUser = mergeCloudUserIntoState(state, cloudUser)
+      }
+    } catch {
+      matchedPhoneUser = null
+    }
+  }
 
   if (!matchedPhoneUser) {
     if (state.users.length === 0) {
       throw new Error(
-        'No saved accounts exist on this app URL yet. If you signed up on another port or on localhost instead of 127.0.0.1, reopen that exact URL to log in.',
+        'No saved accounts exist in this browser yet. If you want the same account across deployments and devices, connect Firebase for cloud-backed sign-in.',
       )
     }
 
-    throw new Error('No saved account matches this phone number on the current app URL.')
+    throw new Error('No saved account matches this phone number in this app.')
   }
 
   if (!matchesStoredPin(matchedPhoneUser, normalizedPinHash, legacyPinHash)) {
@@ -461,16 +526,12 @@ export async function signIn(payload) {
 
   const user = matchedPhoneUser
 
-  if (!user) {
-    throw new Error('Phone number or passcode is incorrect.')
-  }
-
   user.phone = phone
   user.phoneIdentity = normalizedPhone
   user.phoneHash = normalizedPhoneHash
   user.pinHash = normalizedPinHash
 
-  if (firebaseEnabled && auth) {
+  if (firebaseEnabled && auth && !auth.currentUser) {
     const email = buildAuthEmail(normalizedPhone)
     await signInWithEmailAndPassword(auth, email, pin)
   }
@@ -485,6 +546,45 @@ export async function signOut() {
 
   if (firebaseEnabled && auth) {
     await firebaseSignOut(auth)
+  }
+
+  return hydrateState(await writeState(state))
+}
+
+export async function deleteAccount(userId) {
+  const state = await readState()
+  const user = state.users.find((entry) => entry.id === userId)
+
+  if (!user) {
+    return hydrateState(state)
+  }
+
+  if (firebaseEnabled && db) {
+    await deleteDoc(doc(db, 'users', user.id)).catch(() => {})
+    if (user.authUid && user.authUid !== user.id) {
+      await deleteDoc(doc(db, 'users', user.authUid)).catch(() => {})
+    }
+  }
+
+  if (firebaseEnabled && auth?.currentUser?.uid === user.authUid) {
+    try {
+      await deleteUser(auth.currentUser)
+    } catch {
+      throw new Error('Please sign in again before deleting this account.')
+    }
+  }
+
+  state.users = state.users.filter((entry) => entry.id !== userId)
+  state.activities = state.activities.filter((entry) => entry.userId !== userId)
+  state.transactions = state.transactions.filter((entry) => entry.userId !== userId)
+  state.savingsGoals = state.savingsGoals.filter((entry) => entry.userId !== userId)
+  state.moduleProgress = state.moduleProgress.filter((entry) => entry.userId !== userId)
+  state.queue = state.queue.filter((entry) => entry.userId !== userId)
+  state.session.userId = null
+
+  if (state.users.length === 0) {
+    await clearRootState()
+    return hydrateState(createEmptyState())
   }
 
   return hydrateState(await writeState(state))

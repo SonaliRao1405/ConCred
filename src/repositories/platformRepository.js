@@ -134,6 +134,34 @@ async function fileToDataUrl(file) {
   })
 }
 
+async function normalizeEvidenceInput(evidenceInput, fallbackLabel) {
+  if (!evidenceInput) {
+    return null
+  }
+
+  if (typeof evidenceInput === 'object' && evidenceInput.dataUrl) {
+    return {
+      capturedAt: evidenceInput.capturedAt || new Date().toISOString(),
+      dataUrl: evidenceInput.dataUrl,
+      height: evidenceInput.height ?? null,
+      mimeType: evidenceInput.mimeType || 'image/jpeg',
+      name: evidenceInput.name || `${fallbackLabel}-${Date.now()}.jpg`,
+      source: evidenceInput.source || 'in-app-camera',
+      width: evidenceInput.width ?? null,
+    }
+  }
+
+  return {
+    capturedAt: new Date().toISOString(),
+    dataUrl: await fileToDataUrl(evidenceInput),
+    height: null,
+    mimeType: evidenceInput.type || 'image/jpeg',
+    name: evidenceInput.name || `${fallbackLabel}-${Date.now()}.jpg`,
+    source: 'legacy-file-input',
+    width: null,
+  }
+}
+
 function calculateReward(activityType, evidenceCount, trustScore) {
   const activity = activityCatalog.find((item) => item.id === activityType)
   const baseReward = activity?.baseReward ?? 10
@@ -464,8 +492,17 @@ export async function signOut() {
 
 export async function createActivity(userId, payload, options) {
   const state = await readState()
-  const evidenceBefore = payload.beforeImage ? await fileToDataUrl(payload.beforeImage) : null
-  const evidenceAfter = payload.afterImage ? await fileToDataUrl(payload.afterImage) : null
+  const evidenceBefore = await normalizeEvidenceInput(payload.beforeImage, 'before-evidence')
+  const evidenceAfter = await normalizeEvidenceInput(payload.afterImage, 'after-evidence')
+
+  if (!evidenceBefore || !evidenceAfter) {
+    throw new Error('Both before and after evidence must be captured in-app before saving this activity.')
+  }
+
+  if ([evidenceBefore, evidenceAfter].some((evidence) => evidence.source !== 'in-app-camera')) {
+    throw new Error('Evidence must be captured directly in the app camera.')
+  }
+
   const trustScore = deriveTrustScore(userId, state)
   const rewardEstimate = calculateReward(
     payload.activityType,
@@ -483,14 +520,19 @@ export async function createActivity(userId, payload, options) {
     notes: payload.notes,
     createdAt: new Date().toISOString(),
     status: 'pending',
-    flagged: payload.gps?.accuracy > 100 || !payload.afterImage,
+    flagged:
+      payload.gps?.accuracy > 100 ||
+      !evidenceAfter ||
+      [evidenceBefore, evidenceAfter].some(
+        (evidence) => evidence && evidence.source !== 'in-app-camera',
+      ),
     syncState: options.isOnline ? 'synced' : 'queued',
     retryCount: 0,
     trustDelta: 0,
     rewardEstimate,
     gps: payload.gps,
-    beforeEvidence: evidenceBefore ? { name: payload.beforeImage.name, dataUrl: evidenceBefore } : null,
-    afterEvidence: evidenceAfter ? { name: payload.afterImage.name, dataUrl: evidenceAfter } : null,
+    beforeEvidence: evidenceBefore,
+    afterEvidence: evidenceAfter,
     reviewerNote: '',
   }
 

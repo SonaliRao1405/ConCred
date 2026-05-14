@@ -43,7 +43,7 @@ function PlatformRouter() {
 
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <GuardianApp platform={platform} actions={actions} isOnline={isOnline} busyKey={busyKey} />
+      <GuardianApp platform={platform} actions={actions} error={error} isOnline={isOnline} busyKey={busyKey} />
     </Suspense>
   )
 }

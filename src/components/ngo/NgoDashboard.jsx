@@ -39,6 +39,10 @@ function getStatusTone(status) {
   return 'warning'
 }
 
+function getEvidenceSource(evidence) {
+  return evidence?.remoteUrl || evidence?.dataUrl || ''
+}
+
 export function NgoDashboard({ platform, actions, isOnline, busyKey }) {
   const { language, setLanguage, t } = useI18n()
   const [activeTab, setActiveTab] = useState('queue')
@@ -157,6 +161,42 @@ export function NgoDashboard({ platform, actions, isOnline, busyKey }) {
                   </StatusPill>
                 </div>
                 <p>{activity.notes || t('ngo.queue.noNotes')}</p>
+                {(activity.beforeEvidence || activity.afterEvidence) ? (
+                  <div className="queue-evidence-grid">
+                    {[
+                      ['beforeEvidence', t('common.fields.beforeEvidence')],
+                      ['afterEvidence', t('common.fields.afterEvidence')],
+                    ].map(([fieldName, label]) => {
+                      const evidence = activity[fieldName]
+
+                      if (!evidence) {
+                        return (
+                          <div key={fieldName} className="queue-evidence-card is-missing">
+                            <span>{label}</span>
+                            <strong>{t('ngo.queue.noEvidenceCaptured')}</strong>
+                          </div>
+                        )
+                      }
+
+                      return (
+                        <div key={fieldName} className="queue-evidence-card">
+                          <img src={getEvidenceSource(evidence)} alt={label} className="queue-evidence-card__image" />
+                          <div className="queue-evidence-card__meta">
+                            <span>{label}</span>
+                            <strong>
+                              {t('common.labels.capturedAt', {
+                                value: evidence.capturedAt
+                                  ? new Date(evidence.capturedAt).toLocaleString(language)
+                                  : t('common.labels.notAvailable'),
+                              }, `Captured ${evidence.capturedAt ? new Date(evidence.capturedAt).toLocaleString(language) : 'NA'}`)}
+                            </strong>
+                            <small>{t('ngo.queue.captureSource', { source: evidence.source || 'unknown' }, `Source: ${evidence.source || 'unknown'}`)}</small>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : null}
                 <div className="queue-card__facts">
                   <span>{t('ngo.queue.rewardEstimate', { amount: activity.rewardEstimate }, `Reward estimate: ${activity.rewardEstimate} CC`)}</span>
                   <span>{t('ngo.queue.gpsAccuracy', { accuracy: activity.gps?.accuracy ?? t('common.labels.notAvailable', {}, 'NA') }, `GPS accuracy: ${activity.gps?.accuracy ?? 'NA'}m`)}</span>

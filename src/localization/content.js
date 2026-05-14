@@ -60,6 +60,9 @@ export function translateRuntimeMessage(message, t) {
     'No saved account matches this phone number on the current app URL.':
       'errors.phoneNotFoundOnUrl',
     'The passcode is incorrect for this saved account.': 'errors.incorrectPasscode',
+    'Both before and after evidence must be captured in-app before saving this activity.':
+      'errors.capturePairRequired',
+    'Evidence must be captured directly in the app camera.': 'errors.cameraOnlyEvidence',
     'Something went wrong while processing your request.': 'errors.generic',
   }
 

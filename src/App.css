@@ -791,7 +791,8 @@ label span {
 .queue-card,
 .upload-card,
 .quiz-card,
-.filter-chip {
+.filter-chip,
+.queue-evidence-card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 22px;
@@ -862,13 +863,8 @@ label span {
 }
 
 .upload-card {
-  cursor: pointer;
   min-height: 140px;
   padding: 1rem;
-}
-
-.upload-card input {
-  margin-top: 0.5rem;
 }
 
 .upload-card strong,
@@ -1030,6 +1026,181 @@ label span {
 .queue-card__facts {
   flex-wrap: wrap;
   margin: 0.9rem 0;
+}
+
+.capture-card,
+.capture-card__preview,
+.capture-card__details,
+.capture-card__empty,
+.camera-sheet,
+.camera-sheet__body,
+.camera-sheet__frame,
+.camera-sheet__meta,
+.queue-evidence-grid,
+.queue-evidence-card,
+.queue-evidence-card__meta {
+  display: flex;
+}
+
+.capture-card,
+.capture-card__details,
+.capture-card__empty,
+.camera-sheet__body,
+.camera-sheet__meta,
+.queue-evidence-card,
+.queue-evidence-card__meta {
+  flex-direction: column;
+}
+
+.capture-card {
+  gap: 0.9rem;
+}
+
+.capture-card__preview {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  gap: 0.8rem;
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+.capture-card__preview img {
+  border-radius: 16px;
+  height: 108px;
+  object-fit: cover;
+  width: 108px;
+}
+
+.capture-card__details {
+  gap: 0.35rem;
+}
+
+.capture-card__empty {
+  align-items: center;
+  background:
+    radial-gradient(circle at top, rgba(74, 222, 128, 0.16), transparent 45%),
+    rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(74, 222, 128, 0.24);
+  border-radius: 20px;
+  gap: 0.45rem;
+  justify-content: center;
+  min-height: 132px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.camera-sheet {
+  align-items: center;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 40;
+}
+
+.camera-sheet__backdrop {
+  backdrop-filter: blur(16px);
+  background: rgba(4, 8, 5, 0.8);
+  inset: 0;
+  position: absolute;
+}
+
+.camera-sheet .glass-panel {
+  max-width: 760px;
+  position: relative;
+  width: min(100%, 760px);
+  z-index: 1;
+}
+
+.camera-sheet__body {
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.camera-sheet__frame {
+  background: rgba(3, 8, 4, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  min-height: 320px;
+  overflow: hidden;
+  position: relative;
+}
+
+.camera-sheet__video,
+.camera-sheet__preview {
+  aspect-ratio: 3 / 4;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+.camera-sheet__overlay {
+  align-items: flex-start;
+  background: linear-gradient(180deg, rgba(8, 14, 9, 0.12), rgba(8, 14, 9, 0.78));
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  inset-inline: 0;
+  justify-content: flex-end;
+  padding: 1rem;
+  position: absolute;
+}
+
+.camera-sheet__overlay span {
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
+.camera-sheet__overlay strong {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+
+.camera-sheet__meta {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  gap: 0.4rem;
+  padding: 0.95rem 1rem;
+}
+
+.camera-sheet__meta strong,
+.queue-evidence-card__meta strong {
+  font-family: var(--font-mono);
+}
+
+.queue-evidence-grid {
+  gap: 0.85rem;
+  margin-bottom: 0.95rem;
+}
+
+.queue-evidence-card {
+  gap: 0.75rem;
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+.queue-evidence-card.is-missing {
+  justify-content: center;
+  min-height: 140px;
+}
+
+.queue-evidence-card__image {
+  border-radius: 16px;
+  max-height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.queue-evidence-card__meta {
+  gap: 0.28rem;
+}
+
+.queue-evidence-card__meta small {
+  color: var(--text-muted);
 }
 
 .guardian-analytics-row__stats span,
@@ -1230,6 +1401,20 @@ label span {
 
   .module-grid {
     grid-template-columns: 1fr;
+  }
+
+  .capture-card__preview {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .capture-card__preview img {
+    height: auto;
+    width: 100%;
+  }
+
+  .queue-evidence-grid {
+    flex-direction: column;
   }
 
   .floating-nav {

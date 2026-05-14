@@ -24,8 +24,10 @@ import {
   getLocalizedModule,
   getLocalizedStatus,
   getLocalizedSyncState,
+  translateRuntimeMessage,
   useI18n,
 } from '../../localization'
+import { CameraCaptureSheet } from './CameraCaptureSheet'
 import { LanguageSelector } from '../language/LanguageSelector'
 import {
   AnimatedNumber,
@@ -51,9 +53,10 @@ function getStatusTone(status) {
   return 'warning'
 }
 
-export function GuardianApp({ platform, actions, isOnline, busyKey }) {
+export function GuardianApp({ platform, actions, error, isOnline, busyKey }) {
   const { getLanguageMeta, getMessage, language, setLanguage, t } = useI18n()
   const [activeTab, setActiveTab] = useState('home')
+  const [captureSlot, setCaptureSlot] = useState(null)
   const [activityForm, setActivityForm] = useState({
     activityType: platform.content.activities[0]?.id ?? 'forest-patrol',
     notes: '',
@@ -100,6 +103,18 @@ export function GuardianApp({ platform, actions, isOnline, busyKey }) {
     100,
     Math.round(((savingsGoal?.savedAmount ?? 0) / (savingsGoal?.targetAmount || 1)) * 100),
   )
+  const captureDetails = {
+    beforeImage: {
+      buttonLabel: t('common.actions.captureBefore'),
+      emptyLabel: t('uploads.beforeCaptureEmpty'),
+      title: t('uploads.beforeCaptureTitle'),
+    },
+    afterImage: {
+      buttonLabel: t('common.actions.captureAfter'),
+      emptyLabel: t('uploads.afterCaptureEmpty'),
+      title: t('uploads.afterCaptureTitle'),
+    },
+  }
 
   const applyLanguage = (nextLanguage) => {
     setLanguage(nextLanguage)
@@ -155,6 +170,13 @@ export function GuardianApp({ platform, actions, isOnline, busyKey }) {
       gps: null,
     })
     setActiveTab('home')
+  }
+
+  function assignCapture(slot, evidence) {
+    setActivityForm((current) => ({
+      ...current,
+      [slot]: evidence,
+    }))
   }
 
   const homeView = (
@@ -323,28 +345,57 @@ export function GuardianApp({ platform, actions, isOnline, busyKey }) {
             />
           </label>
           <div className="upload-grid">
-            <label className="upload-card">
-              <span>{t('common.fields.beforeEvidence')}</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) =>
-                  setActivityForm((current) => ({ ...current, beforeImage: event.target.files?.[0] ?? null }))
-                }
-              />
-              {activityForm.beforeImage ? <strong>{activityForm.beforeImage.name}</strong> : <small>{t('common.labels.selectImage')}</small>}
-            </label>
-            <label className="upload-card">
-              <span>{t('common.fields.afterEvidence')}</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) =>
-                  setActivityForm((current) => ({ ...current, afterImage: event.target.files?.[0] ?? null }))
-                }
-              />
-              {activityForm.afterImage ? <strong>{activityForm.afterImage.name}</strong> : <small>{t('common.labels.selectImage')}</small>}
-            </label>
+            {[
+              ['beforeImage', t('common.fields.beforeEvidence')],
+              ['afterImage', t('common.fields.afterEvidence')],
+            ].map(([fieldName, fieldLabel]) => {
+              const evidence = activityForm[fieldName]
+              const details = captureDetails[fieldName]
+
+              return (
+                <div key={fieldName} className="upload-card capture-card">
+                  <span>{fieldLabel}</span>
+                  {evidence ? (
+                    <div className="capture-card__preview">
+                      <img src={evidence.dataUrl} alt={fieldLabel} />
+                      <div className="capture-card__details">
+                        <strong>{t('common.labels.cameraOnly')}</strong>
+                        <small>
+                          {t('common.labels.capturedAt', {
+                            value: new Date(evidence.capturedAt).toLocaleString(language),
+                          }, `Captured ${new Date(evidence.capturedAt).toLocaleString(language)}`)}
+                        </small>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="capture-card__empty">
+                      <Camera size={20} />
+                      <strong>{details.emptyLabel}</strong>
+                      <small>{t('uploads.cameraOnlyHint')}</small>
+                    </div>
+                  )}
+                  <div className="inline-actions">
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={() => setCaptureSlot(fieldName)}
+                    >
+                      <Camera size={16} />
+                      {details.buttonLabel}
+                    </button>
+                    {evidence ? (
+                      <button
+                        type="button"
+                        className="ghost-button"
+                        onClick={() => assignCapture(fieldName, null)}
+                      >
+                        {t('common.actions.clearCapture')}
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              )
+            })}
           </div>
           <div className="gps-lock">
             <div className={`gps-lock__orb ${activityForm.gps ? 'is-locked' : ''}`} />
@@ -361,12 +412,41 @@ export function GuardianApp({ platform, actions, isOnline, busyKey }) {
               </span>
             </div>
           </div>
-          <button type="submit" className="primary-button" disabled={busyKey === 'create-activity'}>
+          {error ? <div className="inline-alert">{translateRuntimeMessage(error, t)}</div> : null}
+          <small>{t('uploads.captureRequirementHint')}</small>
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={busyKey === 'create-activity' || !activityForm.beforeImage || !activityForm.afterImage}
+          >
             <UploadCloud size={16} />
             {t('common.actions.saveUpload')}
           </button>
         </form>
       </GlassPanel>
+
+      <CameraCaptureSheet
+        captureLabel={
+          captureSlot === 'afterImage'
+            ? t('common.fields.afterEvidence')
+            : t('common.fields.beforeEvidence')
+        }
+        isOpen={Boolean(captureSlot)}
+        language={language}
+        onCapture={(evidence) => {
+          if (!captureSlot) {
+            return
+          }
+          assignCapture(captureSlot, evidence)
+        }}
+        onClose={() => setCaptureSlot(null)}
+        t={t}
+        title={
+          captureSlot === 'afterImage'
+            ? captureDetails.afterImage.title
+            : captureDetails.beforeImage.title
+        }
+      />
 
       <GlassPanel title={t('uploads.offlineQueueTitle')} subtitle={t('uploads.offlineQueueSubtitle')}>
         <div className="activity-list">

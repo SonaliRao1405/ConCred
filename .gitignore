@@ -1,0 +1,10 @@
+node_modules/
+dist/
+buildcheck/
+.npm-cache/
+.firebase/
+.vercel/
+.netlify/
+coverage/
+*.log
+~syncthing~*
